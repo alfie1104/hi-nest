@@ -1,4 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { Movie } from './entities/movie.entity';
+import { MoviesService } from './movies.service';
 
 /*
     @Get() : express.js의 Get라우터와 같은 역할(express.js에서는 app.get(...)식으로 사용했음)
@@ -9,31 +11,29 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@
 */
 @Controller('movies')
 export class MoviesController {
-    @Get()
-    getAll() : string {
-        return "This will return all movies"
-    }
+    //정의한 Service를 사용하기 위해, NestJS에 아래와 같은 방식으로 요청해야함(생성자를 이용하여 요청)
+    constructor(private readonly moviesService : MoviesService){}
 
-    @Get("search")
-    search(@Query('year') searchingYear : string){
-        return `We are searching for a movie made after : ${searchingYear}`
+    @Get()
+    getAll() : Movie[]{
+        return this.moviesService.getAll()
     }
 
     //@Param 데코레이터를 이용해서 url에 있는 파라미터를 가져올 수 있음.
     @Get(":id")
-    getOne(@Param("id") movieId : string) {
-        return `This will return one movie with the id: ${movieId}`
+    getOne(@Param("id") movieId : string) : Movie{
+        return this.moviesService.getOne(movieId)
     }
     
     //@Body 데코레이터를 이용해서 Post의 body값을 가져올 수 있음
     @Post()
     create(@Body() movieData){
-        return movieData;
+        return this.moviesService.create(movieData);
     }
 
     @Delete(":id")
     remove(@Param('id') movieId: string){
-        return `This will delete a movie with the id ${movieId}`
+        return this.moviesService.deleteOne(movieId);
     }
 
     /*

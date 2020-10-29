@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MoviesController } from './movies/movies.controller';
+import { MoviesService } from './movies/movies.service';
 
 /*
   데코레이터를 이용해서 클래스에 함수기능을 추가함. Function on top of the class and they can do something for the class
@@ -10,6 +11,6 @@ import { MoviesController } from './movies/movies.controller';
 @Module({
   imports: [],
   controllers: [MoviesController],
-  providers: [],
+  providers: [MoviesService],
 })
 export class AppModule {}
