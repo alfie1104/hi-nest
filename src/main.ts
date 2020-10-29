@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
@@ -8,6 +9,13 @@ import { AppModule } from './app.module';
 */
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  //파이프는 express.js의 미들웨어와 유사한 역할을 함
+  //ValidationPipie는 유효성을 검사함
+  //transform옵션을 true로 하면 유저들이 보낸 데이터를 우리가 원하는 type(타입스크립트에 정의한 타입)으로 자동 변환해줌
+  app.useGlobalPipes(
+    new ValidationPipe({whitelist:true, forbidNonWhitelisted:true, transform:true})
+  );
   await app.listen(3000);
 }
 bootstrap();

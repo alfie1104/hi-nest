@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { CreateMovieDto } from './dto/create-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesService } from './movies.service';
 
@@ -21,18 +22,18 @@ export class MoviesController {
 
     //@Param 데코레이터를 이용해서 url에 있는 파라미터를 가져올 수 있음.
     @Get(":id")
-    getOne(@Param("id") movieId : string) : Movie{
+    getOne(@Param("id") movieId : number) : Movie{
         return this.moviesService.getOne(movieId)
     }
     
     //@Body 데코레이터를 이용해서 Post의 body값을 가져올 수 있음
     @Post()
-    create(@Body() movieData){
+    create(@Body() movieData : CreateMovieDto){
         return this.moviesService.create(movieData);
     }
 
     @Delete(":id")
-    remove(@Param('id') movieId: string){
+    remove(@Param('id') movieId: number){
         return this.moviesService.deleteOne(movieId);
     }
 
@@ -42,12 +43,9 @@ export class MoviesController {
         Patch를 사용하면 특정 항목만 업데이트 한다는 뜻이다.
     */
     @Patch(":id")
-    patch(@Param('id') movieId:string, @Body() updateData){
+    patch(@Param('id') movieId:number, @Body() updateData){
         //객체를 return하면 json형식으로 전달함.
         //express.js에서는 json형식으로 return하기 위해 설정을 만져야했음
-        return {
-            updatedMovie:movieId,
-            ...updateData
-        }
+        return this.moviesService.update(movieId, updateData)
     }
 }
