@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req, Res } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
@@ -16,6 +16,17 @@ export class MoviesController {
     //정의한 Service를 사용하기 위해, NestJS에 아래와 같은 방식으로 요청해야함(생성자를 이용하여 요청)
     constructor(private readonly moviesService : MoviesService){}
 
+    /*
+        Cotroller함수의 파라미터에 @Req() req, @Res() res 등을 입력함으로써 request혹은 response에 직접 접근이 가능하다.(NestJS가 express위에서 구동되기 때문)
+        @Get()
+        getAll(@Req() req, @Res() res) : Movie[]{
+            return this.moviesService.getAll()
+        }
+
+        그러나 req나 res같은 Express 객체를 직접 사용하는 것은 좋은 방법이 아님.
+        왜냐하면 NestJS는 두개의 프레임워크(Express, Fastify)에서 동시에 작동하기 때문 (기본적으로 Express위에서 작동되지만, Fastify같은 다른 라이브러리 위에서 사용되도록 전환 가능함)
+        (성능측면에서 express보다 fastify가 2배정도 빠름)
+    */
     @Get()
     getAll() : Movie[]{
         return this.moviesService.getAll()
