@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesService } from './movies.service';
 
@@ -43,7 +44,7 @@ export class MoviesController {
         Patch를 사용하면 특정 항목만 업데이트 한다는 뜻이다.
     */
     @Patch(":id")
-    patch(@Param('id') movieId:number, @Body() updateData){
+    patch(@Param('id') movieId:number, @Body() updateData : UpdateMovieDto){
         //객체를 return하면 json형식으로 전달함.
         //express.js에서는 json형식으로 return하기 위해 설정을 만져야했음
         return this.moviesService.update(movieId, updateData)
